@@ -289,9 +289,23 @@ def generate_csv_files(mission_name, named_selection_name, material_name):
     subtract_df = alternating_df[["Node Number", "X Location (mm)", "Y Location (mm)", "Z Location (mm)"]].copy()
     subtract_df = subtract_df.join(subtract_df_num)
 
-    mean_df = mean_df.rename(columns={"Node Number": "node_id", "X Location (mm)": "x", "Y Location (mm)": "y", "Z Location (mm)": "z"})
-    add_df = add_df.rename(columns={"Node Number": "node_id", "X Location (mm)": "x", "Y Location (mm)": "y", "Z Location (mm)": "z"})
-    subtract_df = subtract_df.rename(columns={"Node Number": "node_id", "X Location (mm)": "x", "Y Location (mm)": "y", "Z Location (mm)": "z"})
+    # Rename columns
+    rename_dict = {
+        "Node Number": "node_id",
+        "X Location (mm)": "x",
+        "Y Location (mm)": "y",
+        "Z Location (mm)": "z",
+        "SX (MPa)": "sxx",
+        "SY (MPa)": "syy",
+        "SZ (MPa)": "szz",
+        "SXY (MPa)": "sxy",
+        "SYZ (MPa)": "syz",
+        "SXZ (MPa)": "sxz"
+    }
+    
+    mean_df = mean_df.rename(columns=rename_dict)
+    add_df = add_df.rename(columns=rename_dict)
+    subtract_df = subtract_df.rename(columns=rename_dict)
 
     # Add mission_name, Load Step End Time, named_selection_name, and material_name columns
     mean_df.insert(0, "mission_name", mission_name)
