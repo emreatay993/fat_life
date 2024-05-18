@@ -50,106 +50,6 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLa
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
-# region Define the class for main GUI
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        
-        self.setWindowTitle('TLIFE - Loading History Generator (Constant Amplitude Load with Mean Stress)')
-        self.setGeometry(100, 100, 1500, 300)
-        self.setStyleSheet("background-color: #F0F0F0;")
-
-        self.central_widget = QWidget()
-        self.setCentralWidget(self.central_widget)
-        
-        self.layout = QVBoxLayout(self.central_widget)
-
-        # Info Icon (as text)
-        self.info_icon_label = QLabel('Help(?)')
-        self.info_icon_label.setFont(QFont('Arial', 14))
-        
-        self.tooltip1_text = '''
-        Ensure that following conditions are checked to make sure that the code works properly:
-        
-        - There should be VPS_Fatigue_Alternating_Stress, VPS_Fatigue_Mean and Fatigue_Temperature
-        result objects in the tree to extract the results from.
-        
-        - For each results object, there must not be more than one object with the same name in the tree.
-        
-        - All these objects should be scoped to the same named selection.
-        
-        - From File/Options/Export, following options should be set to Yes
-            - Include Node Numbers
-            - Include Node Location
-            - Show Tensor Components
-        '''
-        
-        self.info_icon_label.setToolTip(self.tooltip1_text)
-        self.layout.addWidget(self.info_icon_label, alignment=Qt.AlignRight)
-
-        # Mission Name
-        self.mission_name_label = QLabel('Mission Name:')
-        self.mission_name_label.setFont(QFont('Arial', 12))
-        self.layout.addWidget(self.mission_name_label)
-        self.mission_name_input = QLineEdit(self)
-        self.mission_name_input.setFont(QFont('Arial', 12))
-        self.mission_name_input.setStyleSheet("background-color: white; padding: 5px;")
-        self.layout.addWidget(self.mission_name_input)
-
-        self.layout.addSpacing(10)
-
-        # Named Selection
-        self.named_selection_label = QLabel('Named Selection:')
-        self.named_selection_label.setFont(QFont('Arial', 12))
-        self.layout.addWidget(self.named_selection_label)
-        self.named_selection_dropdown = QComboBox(self)
-        self.named_selection_dropdown.addItems("""+ str(list_of_names_of_NS) +""")
-        self.named_selection_dropdown.setFont(QFont('Arial', 12))
-        self.named_selection_dropdown.setStyleSheet("background-color: white; padding: 5px;")
-        self.named_selection_dropdown.setEditable(False)
-        self.layout.addWidget(self.named_selection_dropdown)
-
-        self.layout.addSpacing(10)
-
-        # Material Name
-        self.material_name_label = QLabel('Material Name:')
-        self.material_name_label.setFont(QFont('Arial', 12))
-        self.layout.addWidget(self.material_name_label)
-        self.material_name_dropdown = QComboBox(self)
-        self.material_name_dropdown.addItems("""+ str(material_dropdown_list_items) +""")
-        self.material_name_dropdown.setFont(QFont('Arial', 12))
-        self.material_name_dropdown.setStyleSheet("background-color: white; padding: 5px;")
-        self.material_name_dropdown.setEditable(False)
-        self.layout.addWidget(self.material_name_dropdown)
-
-        self.layout.addSpacing(20)
-
-        # Submit Button
-        self.submit_button = QPushButton('Submit')
-        self.submit_button.setFont(QFont('Arial', 12))
-        self.submit_button.setStyleSheet("background-color: #87CEFA; color: black; padding: 10px;")
-        self.layout.addWidget(self.submit_button)
-        self.submit_button.clicked.connect(self.submit)
-
-        self.center()
-        self.show()
-
-    def submit(self):
-        mission_name = self.mission_name_input.text()
-        named_selection_name = self.named_selection_dropdown.currentText()
-        material_name = self.material_name_dropdown.currentText()
-
-        self.close()
-
-        generate_csv_files(mission_name, named_selection_name, material_name)
-        
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QApplication.desktop().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-# endregion
-
 # region Define material list
 material_dropdown_list_items = [
     '13-8PH AMS5629 Bar H1150',
@@ -245,6 +145,106 @@ material_dropdown_list_items = [
     'Waspaloy TMS01-031441 Forging Solution Stabilization and Precipitation Heat Treated'
 ]
 # endregion 
+
+# region Define the class for main GUI
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        
+        self.setWindowTitle('TLIFE - Loading History Generator (Constant Amplitude Load with Mean Stress)')
+        self.setGeometry(100, 100, 1500, 300)
+        self.setStyleSheet("background-color: #F0F0F0;")
+
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+        
+        self.layout = QVBoxLayout(self.central_widget)
+
+        # Info Icon (as text)
+        self.info_icon_label = QLabel('Help(?)')
+        self.info_icon_label.setFont(QFont('Arial', 14))
+        
+        self.tooltip1_text = '''
+        Ensure that following conditions are checked to make sure that the code works properly:
+        
+        - There should be VPS_Fatigue_Alternating_Stress, VPS_Fatigue_Mean and Fatigue_Temperature
+        result objects in the tree to extract the results from.
+        
+        - For each results object, there must not be more than one object with the same name in the tree.
+        
+        - All these objects should be scoped to the same named selection.
+        
+        - From File/Options/Export, following options should be set to Yes
+            - Include Node Numbers
+            - Include Node Location
+            - Show Tensor Components
+        '''
+        
+        self.info_icon_label.setToolTip(self.tooltip1_text)
+        self.layout.addWidget(self.info_icon_label, alignment=Qt.AlignRight)
+
+        # Mission Name
+        self.mission_name_label = QLabel('Mission Name:')
+        self.mission_name_label.setFont(QFont('Arial', 12))
+        self.layout.addWidget(self.mission_name_label)
+        self.mission_name_input = QLineEdit(self)
+        self.mission_name_input.setFont(QFont('Arial', 12))
+        self.mission_name_input.setStyleSheet("background-color: white; padding: 5px;")
+        self.layout.addWidget(self.mission_name_input)
+
+        self.layout.addSpacing(10)
+
+        # Named Selection
+        self.named_selection_label = QLabel('Named Selection:')
+        self.named_selection_label.setFont(QFont('Arial', 12))
+        self.layout.addWidget(self.named_selection_label)
+        self.named_selection_dropdown = QComboBox(self)
+        self.named_selection_dropdown.addItems("""+ str(list_of_names_of_NS) +""")
+        self.named_selection_dropdown.setFont(QFont('Arial', 12))
+        self.named_selection_dropdown.setStyleSheet("background-color: white; padding: 5px;")
+        self.named_selection_dropdown.setEditable(False)
+        self.layout.addWidget(self.named_selection_dropdown)
+
+        self.layout.addSpacing(10)
+
+        # Material Name
+        self.material_name_label = QLabel('Material Name:')
+        self.material_name_label.setFont(QFont('Arial', 12))
+        self.layout.addWidget(self.material_name_label)
+        self.material_name_dropdown = QComboBox(self)
+        self.material_name_dropdown.addItems(material_dropdown_list_items)
+        self.material_name_dropdown.setFont(QFont('Arial', 12))
+        self.material_name_dropdown.setStyleSheet("background-color: white; padding: 5px;")
+        self.material_name_dropdown.setEditable(False)
+        self.layout.addWidget(self.material_name_dropdown)
+
+        self.layout.addSpacing(20)
+
+        # Submit Button
+        self.submit_button = QPushButton('Submit')
+        self.submit_button.setFont(QFont('Arial', 12))
+        self.submit_button.setStyleSheet("background-color: #87CEFA; color: black; padding: 10px;")
+        self.layout.addWidget(self.submit_button)
+        self.submit_button.clicked.connect(self.submit)
+
+        self.center()
+        self.show()
+
+    def submit(self):
+        mission_name = self.mission_name_input.text()
+        named_selection_name = self.named_selection_dropdown.currentText()
+        material_name = self.material_name_dropdown.currentText()
+
+        self.close()
+
+        generate_csv_files(mission_name, named_selection_name, material_name)
+        
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QApplication.desktop().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+# endregion
 
 # region Define the main file generation routine
 def generate_csv_files(mission_name, named_selection_name, material_name):
