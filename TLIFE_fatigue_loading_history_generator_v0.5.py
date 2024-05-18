@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
         self.material_name_label.setFont(QFont('Arial', 12))
         self.layout.addWidget(self.material_name_label)
         self.material_name_dropdown = QComboBox(self)
-        self.material_name_dropdown.addItems(['Material1', 'Material2', 'Material3'])
+        self.material_name_dropdown.addItems("""+ str(material_dropdown_list_items) +""")
         self.material_name_dropdown.setFont(QFont('Arial', 12))
         self.material_name_dropdown.setStyleSheet("background-color: white; padding: 5px;")
         self.material_name_dropdown.setEditable(False)
@@ -359,4 +359,3 @@ process.WaitForExit()
 
 print("Python script executed successfully.")
 # endregion
-
